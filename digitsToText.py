@@ -8,36 +8,46 @@ tensArray = ['','','twenty','thirty','forty','fifty','sixty',
 
 
 def ConvertDigitsToWords(digits):
-    thousands = digits / 1000
-    thousandsRemainder = digits % 1000
+    millions = digits / 1000000
+    millionsRemainder = digits % 1000000
+
+    thousands = millionsRemainder / 1000
+    thousandsRemainder = millionsRemainder % 1000
 
     hundreds = thousandsRemainder / 100
     hundredsRemainder = thousandsRemainder % 100
 
-    #tens = hundredsRemainder / 10
-    #tensRemainder = hundredsRemainder % 10
-
-    thousandPart = onesArray[thousands] + " thousand " if thousands > 0 else ""
+    millionsPart = TranslateNumber(millions) + " million " if millions > 0 else ""
+    thousandsPart = TranslateNumber(thousands) + " thousand " if thousands > 0 else ""
     hundredsPart = onesArray[hundreds] + " hundred " if hundreds > 0 else ""
-    output = thousandPart + hundredsPart + TranslateTens(hundredsRemainder)
+
+    output = millionsPart + thousandsPart + hundredsPart + TranslateTens(hundredsRemainder)
 
     return output
 
-def TranslateTens(hundredsRemainder):
-    if hundredsRemainder < 20:
-        return str(onesArray[hundredsRemainder])
+
+def TranslateNumber(number):
+    output = ""
+    if number/100 > 0:
+        output += onesArray[number/100] + " hundred "
+    if number%100 > 0:
+        output += TranslateTens(number % 100)
+    return output
+
+
+def TranslateTens(number):
+    if number < 20:
+        return str(onesArray[number])
     else:
-        tens = hundredsRemainder / 10
-        tensRemainder = hundredsRemainder % 10
+        tens = number / 10
+        tensRemainder = number % 10
         return str(tensArray[tens]) + " " + str(onesArray[tensRemainder])
 
 
-
 def main():
-    test = input() #Type at least two digits in terminal separated by a comma, eg., 11, 13
-    #test = [1, 11, 121, 1000, 200, 99, 1001] #test values
-    for item in test:
-        print (ConvertDigitsToWords(item))
+    print("Enter number to convert: ")
+    number = input() 
+    print (ConvertDigitsToWords(number))
 
 
 if __name__ == '__main__':
